@@ -66,9 +66,11 @@ namespace SMS_Sender
 
         private int count;
         private string[] allLines;
+        private string phone_numbers;
 
         void Tick()
         {
+            /*
             allLines = textBox2.Text.Split('\n');
             if (count == allLines.Length)
             {
@@ -78,6 +80,10 @@ namespace SMS_Sender
             
             count++;
             WorkThreadFunction(allLines[count - 1]);
+            */
+            phone_numbers = textBox2.Text;
+            phone_numbers = phone_numbers.Replace("\n", ",");
+            WorkThreadFunction(phone_numbers);
         }
         
         public void WorkThreadFunction(string phone_number)
@@ -129,11 +135,31 @@ namespace SMS_Sender
                 // MessageBox.Show(responseContent);
                 */
 
-                /* Twilio API */
+                /* CheapSMS API */
 
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string path = "http://198.24.149.4/API/pushsms.aspx?loginID=narinmoor3&password=123456&mobile=" + phone_numbers + "&text=" + WebUtility.UrlEncode(message) + "&senderid=" + senderid + "&route_id=17&Unicode=0";
 
+                MessageBox.Show(path);
 
-                Tick();
+                /* Call the Path */
+                WebRequest wrGETURL;
+                wrGETURL = WebRequest.Create(path);
+
+                string responseContent = null;
+
+                using (WebResponse response = wrGETURL.GetResponse())
+                {
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        using (StreamReader sr99 = new StreamReader(stream))
+                        {
+                            responseContent = sr99.ReadToEnd();
+                        }
+                    }
+                }
+                MessageBox.Show(responseContent);
             }
             catch (Exception ex)
             {
