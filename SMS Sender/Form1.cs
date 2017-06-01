@@ -15,6 +15,7 @@ using System.Net;
 using System.Timers;
 using System.Net.Http;
 using System.Collections.Specialized;
+using RestSharp;
 
 namespace SMS_Sender
 {
@@ -82,7 +83,7 @@ namespace SMS_Sender
             WorkThreadFunction(allLines[count - 1]);
             */
             phone_numbers = textBox2.Text;
-            phone_numbers = phone_numbers.Replace("\n", ",");
+            phone_numbers = phone_numbers.Replace("\r\n", ",");
             WorkThreadFunction(phone_numbers);
         }
         
@@ -137,13 +138,11 @@ namespace SMS_Sender
 
                 /* CheapSMS API */
 
+                /*
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
                 string message = textBox1.Text;
                 string path = "http://198.24.149.4/API/pushsms.aspx?loginID=narinmoor3&password=123456&mobile=" + phone_numbers + "&text=" + WebUtility.UrlEncode(message) + "&senderid=" + senderid + "&route_id=17&Unicode=0";
-
-                MessageBox.Show(path);
-
-                /* Call the Path */
+                                
                 WebRequest wrGETURL;
                 wrGETURL = WebRequest.Create(path);
 
@@ -159,6 +158,50 @@ namespace SMS_Sender
                         }
                     }
                 }
+                MessageBox.Show(responseContent);
+                */
+
+                /* clxcommunications API */
+
+                /*
+                var client = new RestClient("https://api.clxcommunications.com/xms/v1/mjgarages12/batches");
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("content-type", "application/json");
+                request.AddHeader("authorization", "Bearer 3924f2180d7e47168d29289146cc2754");
+                request.AddParameter("application/json", "{\"from\":\"12345\",\r\n\"to\":[\"447936973937\"],\r\n\"body\":\"Hello, This is clxcommunication API\"}", ParameterType.RequestBody);
+                IRestResponse response = client.Execute(request);
+                */
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
+                string post_data = "{\"from\":\"" + senderid + "\",\r\n\"to\":[\"" + phone_number.Replace(",", "\",\"") + "\"],\r\n\"body\":\"" + message + "\"}";
+                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/mjgarages12/batches");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+                httpWebRequest.PreAuthenticate = true;
+                request.Headers.Add("Authorization", "Bearer 3924f2180d7e47168d29289146cc2754");
+
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    string json = post_data;
+                    streamWriter.Write(json);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                }
+
+                string responseContent = null;
+
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    responseContent = streamReader.ReadToEnd();
+                }
+
                 MessageBox.Show(responseContent);
             }
             catch (Exception ex)
