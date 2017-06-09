@@ -178,13 +178,13 @@ namespace SMS_Sender
                 string message = textBox1.Text;
                 // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
                 string post_data = "{\"from\":\"" + senderid + "\",\r\n\"to\":[\"" + phone_number.Replace(",", "\",\"") + "\"],\r\n\"body\":\"" + message + "\"}";
-                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/mjgarages12/batches");
+                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/daveypizza12/batches");
 
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("Authorization", "Bearer 3924f2180d7e47168d29289146cc2754");
+                request.Headers.Add("Authorization", "Bearer 46dade2d148d4de3ab294e06430f103f");
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
@@ -202,7 +202,7 @@ namespace SMS_Sender
                     responseContent = streamReader.ReadToEnd();
                 }
 
-                MessageBox.Show(responseContent);
+                MessageBox.Show("All sent.");
             }
             catch (Exception ex)
             {

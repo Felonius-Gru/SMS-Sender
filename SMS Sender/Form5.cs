@@ -13,6 +13,17 @@ namespace SMS_Sender
 {
     public partial class Form5 : Form
     {
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        }
+
         public Form5()
         {
             InitializeComponent();
@@ -28,7 +39,7 @@ namespace SMS_Sender
             string message;
             string caption = "Serial Key";
             string serial_number = textBox1.Text;
-            if ( serial_number == "XAQR1-1AR45-SGWS2-32DGS-3FGQT")
+            if ( serial_number == "EW2L1-KIAO1-WE23N-23NSA-AF1S1")
             {
                 string keyName = @"HKEY_CURRENT_USER\SOFTWARE\SMS Sender";
                 string valueName = "registered";
