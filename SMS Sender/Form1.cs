@@ -172,6 +172,7 @@ namespace SMS_Sender
                 IRestResponse response = client.Execute(request);
                 */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -185,6 +186,32 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
                 request.Headers.Add("Authorization", "Bearer 46dade2d148d4de3ab294e06430f103f");
+                */
+
+                /* cmtelecom API */
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                // string post_data = "{"messages": {"authentication": {"producttoken": "7f626247-3366-492e-b010-41ee4d8f36c3"}, "msg": [ { "from": "SenderName1", "to": [{ "number": "00447799783289" }, {number": "00447516923946"}], "body": {"content": "Test message1" }}] }}";
+                
+                string[] phone_numbers = phone_number.Split(',');
+                string[] numbers = new string[phone_numbers.Length];
+
+                for (int i = 0; i < phone_numbers.Length; i++)
+                {
+                    numbers[i] = "{ \"number\": \"" + phone_numbers[i] + "\" }";
+                }
+
+                string str_numbers = string.Join(",", numbers);
+                
+                string post_data = "{\"messages\": {\"authentication\": {\"producttoken\": \"7f626247-3366-492e-b010-41ee4d8f36c3\"}, \"msg\":[ { \"from\": \"" + senderid + "\", \"to\":[" + str_numbers + "], \"body\": {\"content\":\"" + message + "\" } } ] } }";
+                WebRequest request = WebRequest.Create("https://gw.cmtelecom.com/v1.0/message");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
