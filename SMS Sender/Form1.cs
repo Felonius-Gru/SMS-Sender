@@ -71,7 +71,6 @@ namespace SMS_Sender
 
         void Tick()
         {
-            /*
             allLines = textBox2.Text.Split('\n');
             if (count == allLines.Length)
             {
@@ -81,10 +80,12 @@ namespace SMS_Sender
             
             count++;
             WorkThreadFunction(allLines[count - 1]);
-            */
+
+            /*
             phone_numbers = textBox2.Text;
             phone_numbers = phone_numbers.Replace("\r\n", ",");
             WorkThreadFunction(phone_numbers);
+            */
         }
         
         public void WorkThreadFunction(string phone_number)
@@ -161,16 +162,20 @@ namespace SMS_Sender
                 MessageBox.Show(responseContent);
                 */
 
-                /* clxcommunications API */
+                /* clockworksms API */
 
-                /*
-                var client = new RestClient("https://api.clxcommunications.com/xms/v1/mjgarages12/batches");
-                var request = new RestRequest(Method.POST);
-                request.AddHeader("content-type", "application/json");
-                request.AddHeader("authorization", "Bearer 3924f2180d7e47168d29289146cc2754");
-                request.AddParameter("application/json", "{\"from\":\"12345\",\r\n\"to\":[\"447936973937\"],\r\n\"body\":\"Hello, This is clxcommunication API\"}", ParameterType.RequestBody);
-                IRestResponse response = client.Execute(request);
-                */
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string path = "https://api.clockworksms.com/http/send.aspx?key=d8202b58237aec8eb08df9705720f60404faa9b9&to=" + phone_number + "&content=" + WebUtility.UrlEncode(message) + "&from=" + senderid;
+                                
+                WebRequest wrGETURL;
+                wrGETURL = WebRequest.Create(path);
+
+                WebResponse response = wrGETURL.GetResponse();
+                response.Close();
+                Tick();
+
+                /* clxcommunications API */
 
                 /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -190,6 +195,7 @@ namespace SMS_Sender
 
                 /* cmtelecom API */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -208,7 +214,9 @@ namespace SMS_Sender
                 
                 string post_data = "{\"messages\": {\"authentication\": {\"producttoken\": \"7f626247-3366-492e-b010-41ee4d8f36c3\"}, \"msg\":[ { \"from\": \"" + senderid + "\", \"to\":[" + str_numbers + "], \"body\": {\"content\":\"" + message + "\" } } ] } }";
                 WebRequest request = WebRequest.Create("https://gw.cmtelecom.com/v1.0/message");
+                */
 
+                /*
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
@@ -230,6 +238,7 @@ namespace SMS_Sender
                 }
 
                 MessageBox.Show("All sent.");
+                */
             }
             catch (Exception ex)
             {
