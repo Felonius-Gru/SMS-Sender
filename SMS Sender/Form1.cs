@@ -83,7 +83,7 @@ namespace SMS_Sender
             count++;
             WorkThreadFunction(allLines[count - 1]);
             */
-            
+
             phone_numbers = textBox2.Text;
             phone_numbers = phone_numbers.Replace("\r\n", ",");
             WorkThreadFunction(phone_numbers);
@@ -179,6 +179,21 @@ namespace SMS_Sender
                 Tick();
                 */
 
+                /* messagebird API */
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string post_data = "{\"recipients\":\"" + phone_number + "\",\"originator\":\"" + senderid + "\",\"body\":\"" + message + "\"}";
+                WebRequest request = WebRequest.Create("https://rest.messagebird.com/messages");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+                httpWebRequest.PreAuthenticate = true;
+                request.Headers.Add("Authorization", "AccessKey W6WI9VsXYkfofZXiCVPnukLF3");
+                
                 /* clxcommunications API */
 
                 /*
@@ -225,6 +240,7 @@ namespace SMS_Sender
 
                 /* clickSMS API */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -252,6 +268,7 @@ namespace SMS_Sender
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "text/xml";
                 httpWebRequest.Method = "POST";
+                */
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
