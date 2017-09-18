@@ -16,6 +16,7 @@ using System.Timers;
 using System.Net.Http;
 using System.Collections.Specialized;
 using RestSharp;
+using System.Xml;
 
 namespace SMS_Sender
 {
@@ -71,6 +72,7 @@ namespace SMS_Sender
 
         void Tick()
         {
+            /*
             allLines = textBox2.Text.Split('\n');
             if (count == allLines.Length)
             {
@@ -80,12 +82,12 @@ namespace SMS_Sender
             
             count++;
             WorkThreadFunction(allLines[count - 1]);
-
-            /*
+            */
+            
             phone_numbers = textBox2.Text;
             phone_numbers = phone_numbers.Replace("\r\n", ",");
             WorkThreadFunction(phone_numbers);
-            */
+
         }
         
         public void WorkThreadFunction(string phone_number)
@@ -164,6 +166,7 @@ namespace SMS_Sender
 
                 /* clockworksms API */
 
+                /*
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
                 string message = textBox1.Text;
                 string path = "https://api.clockworksms.com/http/send.aspx?key=d8202b58237aec8eb08df9705720f60404faa9b9&to=" + phone_number + "&content=" + WebUtility.UrlEncode(message) + "&from=" + senderid;
@@ -174,6 +177,7 @@ namespace SMS_Sender
                 WebResponse response = wrGETURL.GetResponse();
                 response.Close();
                 Tick();
+                */
 
                 /* clxcommunications API */
 
@@ -214,11 +218,39 @@ namespace SMS_Sender
                 
                 string post_data = "{\"messages\": {\"authentication\": {\"producttoken\": \"7f626247-3366-492e-b010-41ee4d8f36c3\"}, \"msg\":[ { \"from\": \"" + senderid + "\", \"to\":[" + str_numbers + "], \"body\": {\"content\":\"" + message + "\" } } ] } }";
                 WebRequest request = WebRequest.Create("https://gw.cmtelecom.com/v1.0/message");
-                */
-
-                /*
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+                */
+
+                /* clickSMS API */
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
+                string[] phone_numbers = phone_number.Split(',');
+
+                XmlDocument doc = new XmlDocument();
+                XmlElement msg = (XmlElement)doc.AppendChild(doc.CreateElement("Msg"));
+                msg.AppendChild(doc.CreateElement("Txn")).InnerText = "submitsms";
+                msg.AppendChild(doc.CreateElement("AccountID")).InnerText = "narinmoor3";
+                msg.AppendChild(doc.CreateElement("Password")).InnerText = "YWtqMq93";
+                msg.AppendChild(doc.CreateElement("SenderID")).InnerText = senderid;
+                msg.AppendChild(doc.CreateElement("Message")).InnerText = message;
+                msg.AppendChild(doc.CreateElement("RateCode")).InnerText = "1";
+                XmlElement mobiles = (XmlElement)msg.AppendChild(doc.CreateElement("Mobiles"));
+                foreach (string number in phone_numbers)
+                {
+                    mobiles.AppendChild(doc.CreateElement("MobileNo")).InnerText = number;
+                }
+                
+                string post_data = doc.OuterXml;
+                WebRequest request = WebRequest.Create("http://service.clicksms.co.uk");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "text/xml";
                 httpWebRequest.Method = "POST";
 
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
@@ -236,9 +268,9 @@ namespace SMS_Sender
                 {
                     responseContent = streamReader.ReadToEnd();
                 }
-
+                
                 MessageBox.Show("All sent.");
-                */
+
             }
             catch (Exception ex)
             {
