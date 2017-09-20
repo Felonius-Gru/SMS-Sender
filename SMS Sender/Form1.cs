@@ -164,6 +164,29 @@ namespace SMS_Sender
                 MessageBox.Show(responseContent);
                 */
 
+                /* voodooSMS API */
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string path = "https://www.voodooSMS.com/vapi/server/sendSMS?dest=" + phone_numbers + "&msg=" + WebUtility.UrlEncode(message) + "&orig=" + senderid + "&uid=narinmoor3_api&pass=dj6oz52&validity=1&format=json";
+
+                WebRequest wrGETURL;
+                wrGETURL = WebRequest.Create(path);
+
+                string responseContent = null;
+
+                using (WebResponse response = wrGETURL.GetResponse())
+                {
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        using (StreamReader sr99 = new StreamReader(stream))
+                        {
+                            responseContent = sr99.ReadToEnd();
+                        }
+                    }
+                }
+                MessageBox.Show("All sent.");
+
                 /* clockworksms API */
 
                 /*
@@ -181,6 +204,7 @@ namespace SMS_Sender
 
                 /* messagebird API */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -193,7 +217,8 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
                 request.Headers.Add("Authorization", "AccessKey W6WI9VsXYkfofZXiCVPnukLF3");
-                
+                */
+
                 /* clxcommunications API */
 
                 /*
@@ -270,6 +295,7 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 */
 
+                /*
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     string json = post_data;
@@ -287,7 +313,7 @@ namespace SMS_Sender
                 }
                 
                 MessageBox.Show("All sent.");
-
+                */
             }
             catch (Exception ex)
             {
