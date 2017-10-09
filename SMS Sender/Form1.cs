@@ -15,8 +15,9 @@ using System.Net;
 using System.Timers;
 using System.Net.Http;
 using System.Collections.Specialized;
-using RestSharp;
+//using RestSharp;
 using System.Xml;
+using Telesign;
 
 namespace SMS_Sender
 {
@@ -166,6 +167,7 @@ namespace SMS_Sender
 
                 /* voodooSMS API */
 
+                /*
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
                 string message = textBox1.Text;
                 string path = "https://www.voodooSMS.com/vapi/server/sendSMS?dest=" + phone_numbers + "&msg=" + WebUtility.UrlEncode(message) + "&orig=" + senderid + "&uid=narinmoor3_api&pass=dj6oz52&validity=1&format=json";
@@ -186,6 +188,7 @@ namespace SMS_Sender
                     }
                 }
                 MessageBox.Show("All sent.");
+                */
 
                 /* clockworksms API */
 
@@ -216,8 +219,28 @@ namespace SMS_Sender
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("Authorization", "AccessKey W6WI9VsXYkfofZXiCVPnukLF3");
+                request.Headers.Add("Authorization", "AccessKey otUeLaxdY1IqZtSRfo8vV7ski");
                 */
+
+                /* telesign API */
+
+                string customerId = "F9B9393D-B41F-4CAB-8244-7FB1AFBD02B1";
+                string apiKey = "ocpD0JpavouG5dkzNrUZjnGDdQN29JtpeEpwEhfu4STsiBfda+uNk5QOxg498VGaCIMNe8Ljf5y6XsjRZ7WaYg==";
+
+                string phoneNumber = "447516923944";
+
+                string message = "Hello";
+                string messageType = "ARN";
+
+                try
+                {
+                    MessagingClient messagingClient = new MessagingClient(customerId, apiKey, "https://rest-api.telesign.com");
+                    RestClient.TelesignResponse telesignResponse = messagingClient.Message(phoneNumber, message, messageType);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 /* clxcommunications API */
 
