@@ -15,9 +15,9 @@ using System.Net;
 using System.Timers;
 using System.Net.Http;
 using System.Collections.Specialized;
-//using RestSharp;
+using RestSharp;
 using System.Xml;
-using Telesign;
+// using Telesign;
 
 namespace SMS_Sender
 {
@@ -224,6 +224,7 @@ namespace SMS_Sender
 
                 /* telesign API */
 
+                /*
                 string customerId = "F9B9393D-B41F-4CAB-8244-7FB1AFBD02B1";
                 string apiKey = "ocpD0JpavouG5dkzNrUZjnGDdQN29JtpeEpwEhfu4STsiBfda+uNk5QOxg498VGaCIMNe8Ljf5y6XsjRZ7WaYg==";
 
@@ -241,24 +242,23 @@ namespace SMS_Sender
                 {
                     Console.WriteLine(e);
                 }
+                */
 
                 /* clxcommunications API */
 
-                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
                 string message = textBox1.Text;
                 // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
                 string post_data = "{\"from\":\"" + senderid + "\",\r\n\"to\":[\"" + phone_number.Replace(",", "\",\"") + "\"],\r\n\"body\":\"" + message + "\"}";
-                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/daveypizza12/batches");
+                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/ayrbeautyl12/batches");
 
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("Authorization", "Bearer 46dade2d148d4de3ab294e06430f103f");
-                */
+                request.Headers.Add("Authorization", "Bearer 59c87dd33ee44714b07e2f1a4e721061");
 
                 /* cmtelecom API */
 
@@ -318,7 +318,6 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 */
 
-                /*
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     string json = post_data;
@@ -336,7 +335,6 @@ namespace SMS_Sender
                 }
                 
                 MessageBox.Show("All sent.");
-                */
             }
             catch (Exception ex)
             {
