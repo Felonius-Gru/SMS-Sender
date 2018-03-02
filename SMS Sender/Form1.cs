@@ -90,6 +90,13 @@ namespace SMS_Sender
             WorkThreadFunction(phone_numbers);
 
         }
+
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         
         public void WorkThreadFunction(string phone_number)
         {
@@ -246,6 +253,7 @@ namespace SMS_Sender
 
                 /* clxcommunications API */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -259,6 +267,35 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
                 request.Headers.Add("Authorization", "Bearer 59c87dd33ee44714b07e2f1a4e721061");
+                */
+
+                /* B-S-G API */
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string[] phone_numbers = phone_number.Split(',');
+                string last_phone = phone_numbers.Last();
+                string phones = "";
+                foreach (string number in phone_numbers)
+                {
+                    phones += "{\r\n\"msisdn\":\"" + number + "\",\r\n\"reference\":\"" + RandomString(10) + "\"\r\n}";
+                    if (number != last_phone)
+                    {
+                        phones += ",\r\n";
+                    }
+                }
+                
+                // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
+                string post_data = "{\"originator\":\"" + senderid + "\",\r\n\"body\":\"" + message + "\",\r\n\"destination\":\"phones\",\r\n\"phones\":[" + phones + "]}";
+                WebRequest request = WebRequest.Create("https://app.bsg.hk/rest/sms/create");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "PUT";
+                httpWebRequest.PreAuthenticate = true;
+                request.Headers.Add("X-API-KEY", "live_sZgCgiRZCdQHM7oFEZ5x");
 
                 /* cmtelecom API */
 
