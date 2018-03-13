@@ -287,7 +287,6 @@ namespace SMS_Sender
                     }
                 }
                 
-                // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
                 string post_data = "{\"originator\":\"" + senderid + "\",\r\n\"body\":\"" + message + "\",\r\n\"destination\":\"phones\",\r\n\"phones\":[" + phones + "]}";
                 WebRequest request = WebRequest.Create("https://app.bsg.hk/rest/sms/create");
 
@@ -295,7 +294,8 @@ namespace SMS_Sender
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "PUT";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("X-API-KEY", "live_sZgCgiRZCdQHM7oFEZ5x");
+                request.Headers.Add("X-API-KEY", "live_62i1CriaoGLSHpJWQMBM");
+                // request.Headers.Add("X-API-KEY", "live_CgATU976Ir89cNW6WQz6");
 
                 /* cmtelecom API */
 
