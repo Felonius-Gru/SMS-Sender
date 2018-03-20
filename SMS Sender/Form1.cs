@@ -271,6 +271,7 @@ namespace SMS_Sender
 
                 /* B-S-G API */
 
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -296,6 +297,38 @@ namespace SMS_Sender
                 httpWebRequest.PreAuthenticate = true;
                 request.Headers.Add("X-API-KEY", "live_62i1CriaoGLSHpJWQMBM");
                 // request.Headers.Add("X-API-KEY", "live_CgATU976Ir89cNW6WQz6");
+                */
+
+                /* Gateway API */
+                
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                var apiKey = "OCBnh8QnPgpJGIsGkoQObkU_";
+                var apiSecret = "9NzpaCQ2Eq&Dk09oA*uJ!uftaJgJm7vDW#5ZfiEw";
+                var client = new RestSharp.RestClient("https://gatewayapi.com/rest/");
+                string[] phone_numbers = phone_number.Split(',');
+
+                client.Authenticator = RestSharp.Authenticators.OAuth1Authenticator.ForRequestToken(apiKey, apiSecret);
+                var request = new RestSharp.RestRequest("mtsms", RestSharp.Method.POST);
+
+                request.AddJsonBody(new {
+                    sender = senderid,
+                    message = message,
+                    recipients = phone_numbers.Select(number => new { msisdn = number })
+                });
+                var response = client.Execute(request);
+
+                if ((int) response.StatusCode == 200)
+                {
+                    var res = Newtonsoft.Json.Linq.JObject.Parse(response.Content);
+                    MessageBox.Show("All sent.");
+                } else if (response.ResponseStatus == RestSharp.ResponseStatus.Completed) {
+                    MessageBox.Show(response.Content);
+                } else {
+                    MessageBox.Show(response.ErrorMessage);
+                }
 
                 /* cmtelecom API */
 
@@ -355,6 +388,7 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 */
 
+                /*
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     string json = post_data;
@@ -372,6 +406,7 @@ namespace SMS_Sender
                 }
                 
                 MessageBox.Show("All sent.");
+                */
             }
             catch (Exception ex)
             {
