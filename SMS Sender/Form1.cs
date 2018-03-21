@@ -300,7 +300,8 @@ namespace SMS_Sender
                 */
 
                 /* Gateway API */
-                
+
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -329,6 +330,34 @@ namespace SMS_Sender
                 } else {
                     MessageBox.Show(response.ErrorMessage);
                 }
+                */
+
+                /* Gateway API without using RestSharp */
+                
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                string[] phone_numbers = phone_number.Split(',');
+                string last_phone = phone_numbers.Last();
+                string phones = "";
+                foreach (string number in phone_numbers)
+                {
+                    phones += "{ \"msisdn\":" + number + " }";
+                    if (number != last_phone)
+                    {
+                        phones += ",";
+                    }
+                }
+                
+                string post_data = "{\"sender\":\"" + senderid + "\",\r\n\"message\":\"" + message + "\",\r\n\"recipients\":[" + phones + "]}";
+                WebRequest request = WebRequest.Create("https://gatewayapi.com/rest/mtsms");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "POST";
+                httpWebRequest.PreAuthenticate = true;
+                request.Headers.Add("Authorization", "Basic WjRmRUp6NEtTUmlMQnBLRURtNUZQd2hGRGJzSlR0cW16ZXZWbm1EYzVaSzhpczlzZmZQZDFxVE5XZzVhdUVzTzo=");
 
                 /* cmtelecom API */
 
@@ -388,7 +417,6 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 */
 
-                /*
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     string json = post_data;
@@ -406,7 +434,6 @@ namespace SMS_Sender
                 }
                 
                 MessageBox.Show("All sent.");
-                */
             }
             catch (Exception ex)
             {
