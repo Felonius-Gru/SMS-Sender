@@ -73,7 +73,6 @@ namespace SMS_Sender
 
         void Tick()
         {
-            /*
             allLines = textBox2.Text.Split('\n');
             if (count == allLines.Length)
             {
@@ -83,18 +82,18 @@ namespace SMS_Sender
             
             count++;
             WorkThreadFunction(allLines[count - 1]);
-            */
-
+            
+            /*
             phone_numbers = textBox2.Text;
             phone_numbers = phone_numbers.Replace("\r\n", ",");
             WorkThreadFunction(phone_numbers);
-
+            */
         }
 
         private static Random random = new Random();
         public static string RandomString(int length)
         {
-            const string chars = "ABCDEFGHIJKLMOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
         
@@ -260,16 +259,16 @@ namespace SMS_Sender
                 string message = textBox1.Text;
                 // string post_data = "{\"from\":\"demo\",\r\n\"to\":[\"447936973937\",\"447542897252\"],\r\n\"body\":\"hi, this is\"}";
                 string post_data = "{\"from\":\"" + senderid + "\",\r\n\"to\":[\"" + phone_number.Replace(",", "\",\"") + "\"],\r\n\"body\":\"" + message + "\"}";
-                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/ayrbeautyl12/batches");
+                WebRequest request = WebRequest.Create("https://api.clxcommunications.com/xms/v1/cheesmanbr12/batches");
 
                 var httpWebRequest = (HttpWebRequest)request;
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("Authorization", "Bearer 59c87dd33ee44714b07e2f1a4e721061");
+                request.Headers.Add("Authorization", "Bearer cf1e26c916e44171b6a4a880021962f8");
                 */
 
-                /* B-S-G API */
+                /* B-S-G API (Multi) */
 
                 /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -295,9 +294,26 @@ namespace SMS_Sender
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "PUT";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("X-API-KEY", "live_62i1CriaoGLSHpJWQMBM");
-                // request.Headers.Add("X-API-KEY", "live_CgATU976Ir89cNW6WQz6");
+                request.Headers.Add("X-API-KEY", "live_ul4B1qFXA1ml285MVvrv");
                 */
+
+                /* B-S-G API (Single) */
+
+
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
+                string message = textBox1.Text;
+                
+                string post_data = "{\"destination\":\"phone\",\r\n\"originator\":\"" + senderid + "\",\r\n\"body\":\"" + message + "\",\r\n\"msisdn\":\"" + phone_number + "\",\r\n\"reference\":\"" + RandomString(16) + "\"\r\n}";
+                WebRequest request = WebRequest.Create("https://app.bsg.hk/rest/sms/create");
+
+                var httpWebRequest = (HttpWebRequest)request;
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Method = "PUT";
+                httpWebRequest.PreAuthenticate = true;
+                request.Headers.Add("X-API-KEY", "live_ul4B1qFXA1ml285MVvrv");
+
 
                 /* Gateway API */
 
@@ -333,7 +349,8 @@ namespace SMS_Sender
                 */
 
                 /* Gateway API without using RestSharp */
-                
+
+                /*
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 string senderid = comboBox1.GetItemText(comboBox1.SelectedItem);
@@ -357,7 +374,8 @@ namespace SMS_Sender
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 httpWebRequest.PreAuthenticate = true;
-                request.Headers.Add("Authorization", "Basic WjRmRUp6NEtTUmlMQnBLRURtNUZQd2hGRGJzSlR0cW16ZXZWbm1EYzVaSzhpczlzZmZQZDFxVE5XZzVhdUVzTzo=");
+                request.Headers.Add("Authorization", "Basic Zm9XNW1qZUhST0tCMUtHb2VUZzN6eUFJVjVJenNPRnlSNUlfT1JpY2pOYlJnNWljbUJ0RE5QLW1KUFFyeTVWajo=");
+                */
 
                 /* cmtelecom API */
 
@@ -417,6 +435,7 @@ namespace SMS_Sender
                 httpWebRequest.Method = "POST";
                 */
 
+                
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     string json = post_data;
@@ -432,8 +451,12 @@ namespace SMS_Sender
                 {
                     responseContent = streamReader.ReadToEnd();
                 }
-                
+
+                Tick();
+
+                /*
                 MessageBox.Show("All sent.");
+                */
             }
             catch (Exception ex)
             {

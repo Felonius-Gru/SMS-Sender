@@ -39,7 +39,7 @@ namespace SMS_Sender
             string message;
             string caption = "Serial Key";
             string serial_number = textBox1.Text;
-            if ( serial_number == "S0SLK-CVS35-SF672-4HQ52-63SDF")
+            if ( serial_number == "B32D6-D36A3-37K6D-0WQ52-AJ4D7F")
             {
                 string keyName = @"HKEY_CURRENT_USER\SOFTWARE\SMS Sender";
                 string valueName = "registered";
